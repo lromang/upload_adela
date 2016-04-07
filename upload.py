@@ -41,7 +41,7 @@ file1 = drive.CreateFile({'title': title,
                           "parents":[{"kind":"drive#fileLink","id":"0B5p8KkRjjG4HYzBTbEIxWFdqZnM"}]
                       })
 file1.SetContentString(c)
-file1.Upload()
+file1.Upload(param = {'convert':True})
 
 ##------------------------------------------------
 
@@ -54,23 +54,23 @@ c         = filter(lambda x: x in printable, c)
 
 ## Upload file
 ## title = "resumen_" + time.strftime("%Y-%m-%dT%H:%M:%S")+".csv"
-## file1 = drive.CreateFile({'title': "dgm_analytics.csv",
-   ##                       'shareable':True,
-     ##                     'userPermission':[{'kind':'drive#permission',
-       ##                                      'type':'anyone',
-         ##                                    'value':'anyone',
-           ##                                  'role':'reader'}],
-             ##             'mimeType':'text/csv',
-               ##           "parents":[{"kind":"drive#fileLink","id":"0B5p8KkRjjG4HcFNOdXFsNDFvSEk"}]
-                 ##     })
-## file1.SetContentString(c)
-## file1.Upload()
+file1 = drive.CreateFile({'title': "dgm_analytics.csv",
+                          'shareable':True,
+                          'userPermission':[{'kind':'drive#permission',
+                                             'type':'anyone',
+                                             'value':'anyone',
+                                             'role':'reader'}],
+                          'mimeType':'text/csv',
+                          "parents":[{"kind":"drive#fileLink","id":"0B5p8KkRjjG4HcFNOdXFsNDFvSEk"}]
+                      })
+file1.SetContentString(c)
+file1.Upload()
 
 ## Update
-file2 = drive.CreateFile({'id':'0B5p8KkRjjG4HcTdUTEF6dnpZTWc'})
+file2   = drive.CreateFile({'id':'0B5p8KkRjjG4HUzRvYlB1bkNiVHc'})
 content = file2.GetContentString()
 file2.SetContentString(content.replace(content, c))
 file2.Upload()
 
 ## Download
-## https://drive.google.com/uc?export=download&id=0B5p8KkRjjG4HcTdUTEF6dnpZTWc
+## https://drive.google.com/uc?export=download&id=0B5p8KkRjjG4HUzRvYlB1bkNiVHc
