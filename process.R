@@ -9,6 +9,7 @@
 ## Libraries
 ###################################
 suppressPackageStartupMessages(library(stringr))
+suppressPackageStartupMessages(library(RGA))
 suppressPackageStartupMessages(library(plyr))
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(data.table))
@@ -118,6 +119,48 @@ write.csv(final_data,
           row.names = FALSE)
 
 ###################################
+## Google Analytics
+###################################
+## Profiles
+##        id              name
+## 1 88225771 All Web Site Data
+## 2 91319629 All Web Site Data DESCARGAS 2014/10/01 - today
+## 3 91863615 All Web Site Data VISITAS   2014/10/01 - today
+
+## token <- Auth("497323299158-elgh4c5t1o57dd8qfvakr99ge6d2qge3.apps.googleusercontent.com",
+##              "I7wDgHvwULRHkB7bjt_JrrJt")
+## save(token, file="oauth_token")
+## load("oauth_token")
+## Validate Token
+## ValidateToken(token)
+authorize()
+## -----------------------------
+## Queries
+## -----------------------------
+yesterday <- today() - 1
+
+## Downloads
+id <- 91319629
+query.downloads <- get_ga(id, start.date   = "2014-10-01",
+                   end.date    = yesterday,
+                   dimensions  = "ga:date, ga:pagePath, ga:hour, ga:medium",
+                   metrics     = "ga:sessions",
+                   sort        = "-ga:date")
+analytic_downloads <- sum(query.downloads$sessions)
+
+## Visites
+id <- 91863615
+query.visits <- get_ga(id, start.date   = "2014-10-01",
+                      end.date    = yesterday,
+                      dimensions  = "ga:date, ga:pagePath, ga:hour, ga:medium",
+                      metrics     = "ga:sessions,ga:pageviews,ga:bounces",
+                      sort        = "-ga:date")
+analytic_visits  <- sum(query.visits$sessions)
+analytic_bounces <- sum(query.visits$bounces)
+
+
+
+###################################
 ## Add data
 ###################################
 conj.dep.hack <- RJSONIO::fromJSON(getURL("http://catalogo.datos.gob.mx/api/3/action/package_search?q=&rows=10&sort=dcat_modified+desc&start=0"))$result[[1]]
@@ -128,40 +171,22 @@ data_summ <- data.frame("Concepto" = c(
                            "Conjuntos de datos de dependencias publicados",
                            "Dependencias publicando",
                            "Dependencias con Inventario",
-                           "Dependencias con Plan"
+                           "Dependencias con Plan",
+                           paste("Visitas (2014-10-01 <-> ", yesterday, ")"),
+                           paste("Descargas (2014-10-01 <-> ", yesterday, ")")
                        ), "Total" = c(
                               nrow(all),
                               conj.dep.hack,
                               conj.non.dep,
                               nrow(final_data) - 3,
                               sum(ent_rec_conj$tiene_inventario == "Si"),
-                              sum(ent_rec_conj$tiene_plan == "Si")
+                              sum(ent_rec_conj$tiene_plan == "Si"),
+                              analytic_visits,
+                              analytic_downloads
                           ))
 write.csv(data_summ,
           "datosgob_resum.csv",
           row.names = FALSE)
-
-###################################
-## Google Analytics
-###################################
-## token <- Auth("497323299158-elgh4c5t1o57dd8qfvakr99ge6d2qge3.apps.googleusercontent.com",
-##             "JChpwmo_kYIu0_-UxBX-XHNe")
-
-## Validate token
-## ValidateToken(token)
-
-## Query
-## query.list <- Init(start.date   = "2015-10-01",
-##                   end.date    = today(),
-##                   dimensions  = "ga:date,ga:pagePath,ga:hour,ga:medium",
-##                   metrics     = "ga:sessions,ga:pageviews",
-##                   max.results = 10000,
-##                   sort        = "-ga:date",
-##                  table.id     = "ga:33093633")
-
-## ga.query <- QueryBuilder(query.list)
-
-## ga.data <- GetReportData(ga.query, token, split_daywise = T)
 
 ###################################
 ## Eraser
