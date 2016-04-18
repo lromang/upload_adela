@@ -148,6 +148,19 @@ query.downloads <- get_ga(id, start.date   = "2014-10-01",
                    sort        = "-ga:date")
 analytic_downloads <- sum(query.downloads$sessions)
 
+## Resource downloads
+## resource_download <- query.downloads[,c(2,5)] %>%
+   ## filter(str_detect(pagePath, "/resource/"))
+## filter_rec <- laply(resource_download$pagePath, function(t) t <- str_split(t, "/resource/")[[1]][2])
+## rec_id <- laply(filter_rec, function(t) t <- str_extract(t, "([[:alnum:]]{4,}-?){4,}[[:alnum:]]{5,}"))
+
+## Count downloads
+## resource_download$rec_id <- rec_id
+## rec_table      <- data.table(resource_download)
+## download_count <- rec_table[,sum(sessions), by = "rec_id"]
+## names(download_count) <- c("rec_id", "n_downloads")
+## full_mat              <- merge(mat, download_count, by = "rec_id", all.x = TRUE)
+
 ## Visites
 id <- 91863615
 query.visits <- get_ga(id, start.date   = "2014-10-01",
@@ -186,6 +199,18 @@ data_summ <- data.frame("Concepto" = c(
                           ))
 write.csv(data_summ,
           "datosgob_resum.csv",
+          row.names = FALSE)
+
+###################################
+## Public data
+###################################
+public_data <- all[,c(1, 2, 3, 4, 5)]
+public_data$clave <- paste0(public_data$dep,
+                           public_data$conj)
+public_data <- filter(public_data,
+                     !duplicated(clave))
+public_data <- public_data[order(public_data$slug),]
+write.csv(public_data, "public_data.csv",
           row.names = FALSE)
 
 ###################################

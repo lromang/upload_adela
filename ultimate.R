@@ -62,6 +62,7 @@ for(i in 1:length(results)){
             resource.format <- laply(resources, function(t)t <- {if(!is.null(t$format)){t$format}else{NA}})
             resource.size   <- laply(resources, function(t)t <- {if(!is.null(t$size)){t$size}else{NA}})
             resource.desc   <- laply(resources, function(t)t <- {if(!is.null(t$description)){t$description}else{NA}})
+            resource.id     <- laply(resources, function(t)t <- {if(!is.null(t$revision_id)){t$revision_id}else{NA}})
         }
         n <- length(resource.name)
         all_data <- rbind(all_data,
@@ -77,6 +78,7 @@ for(i in 1:length(results)){
                             rec_url    = resource.url,
                             rec_format = resource.format,
                             rec_tam    = resource.size,
+                            rec_id     = resource.id,
                             id_conj    = rep(id_conj,n)
                         )
                         )
@@ -95,6 +97,7 @@ for(i in 1:length(results)){
             resource.format <- laply(resources, function(t)t <- {if(!is.null(t$format)){t$format}else{NA}})
             resource.size   <- laply(resources, function(t)t <- {if(!is.null(t$size)){t$size}else{NA}})
             resource.desc   <- laply(resources, function(t)t <- {if(!is.null(t$description)){t$description}else{NA}})
+            resource.id     <- laply(resources, function(t)t <- {if(!is.null(t$revision_id)){t$revision_id}else{NA}})
         }
         n <- length(resource.name)
         all_data <- rbind(all_data,
@@ -110,6 +113,7 @@ for(i in 1:length(results)){
                              rec_url    = resource.url,
                              rec_format = resource.format,
                              rec_tam    = resource.size,
+                             rec_id     = resource.id,
                              id_conj    = rep(id_conj,n)
                         )
                         )
