@@ -148,6 +148,11 @@ query.downloads <- get_ga(id, start.date   = "2014-10-01",
                    sort        = "-ga:date")
 analytic_downloads <- sum(query.downloads$sessions)
 
+## top 5
+filter_resources <- data.table(query.downloads[str_detect(query.downloads$pagePath, "resourc"), ])
+top <- filter_resources[,sum(sessions), by = "pagePath"]
+head(top[order(top$V1, decreasing = TRUE), ])
+
 ## Resource downloads
 ## resource_download <- query.downloads[,c(2,5)] %>%
    ## filter(str_detect(pagePath, "/resource/"))
@@ -185,8 +190,9 @@ data_summ <- data.frame("Concepto" = c(
                            "Dependencias publicando",
                            "Dependencias con Inventario",
                            "Dependencias con Plan",
-                           paste("Visitas (2014-10-01 <-> ", yesterday, ")"),
-                           paste("Descargas (2014-10-01 <-> ", yesterday, ")")
+                           "Visitas",
+                           "Descargas",
+                           "Periodo"
                        ), "Total" = c(
                               nrow(all),
                               conj.dep.hack,
@@ -195,7 +201,8 @@ data_summ <- data.frame("Concepto" = c(
                               sum(ent_rec_conj$tiene_inventario == "Si"),
                               sum(ent_rec_conj$tiene_plan == "Si"),
                               analytic_visits,
-                              analytic_downloads
+                              analytic_downloads,
+                              paste("2014-10-10", yesterday, sep = " / ")
                           ))
 write.csv(data_summ,
           "datosgob_resum.csv",
