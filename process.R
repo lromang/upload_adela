@@ -149,9 +149,13 @@ query.downloads <- get_ga(id, start.date   = "2014-10-01",
 analytic_downloads <- sum(query.downloads$sessions)
 
 ## top 5
-filter_resources <- data.table(query.downloads[str_detect(query.downloads$pagePath, "resourc"), ])
-top <- filter_resources[,sum(sessions), by = "pagePath"]
-head(top[order(top$V1, decreasing = TRUE), ])
+## filter_resources <- data.table(query.downloads[str_detect(query.downloads$pagePath, "resourc"), ])
+## count_resources  <- filter_resources[,sum(sessions), by = "pagePath"]
+## count_resources$rec_id <- count_resources[,str_extract(pagePath,
+##                                                      "([[:alnum:]]{4,}\\-){4,}[[:alnum:]]{5,}")]
+## count_resources$pagePath <- NULL
+## all_analytics <- merge(all, count_resources, by = "rec_id", all.x = TRUE)
+## sum(na.omit(all_analytics$V1))
 
 ## Resource downloads
 ## resource_download <- query.downloads[,c(2,5)] %>%
@@ -175,6 +179,7 @@ query.visits <- get_ga(id, start.date   = "2014-10-01",
                       sort        = "-ga:date")
 analytic_visits  <- sum(query.visits$sessions)
 analytic_bounces <- sum(query.visits$bounces)
+
 
 
 

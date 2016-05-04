@@ -119,4 +119,5 @@ for(i in 1:length(results)){
                         )
     }
 }
-write.csv(all_data,"MAT.csv",row.names = FALSE)
+
+write.csv(all_data[order(all_data$dep, decreasing = TRUE),], "MAT.csv", row.names = FALSE)
